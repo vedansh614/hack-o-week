@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shankar Bhojnalay - The Authentic Taste of Spice</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #991b1b; /* Deep Red */
+            --accent: #d97706;  /* Spicy Orange */
+            --bg: #fffbf5;
+        }
+        
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--bg);
+            background-image: url("https://www.transparenttextures.com/patterns/pinstriped-suit.png");
+        }
+
+        h1, h2 {
+            font-family: 'Playfair Display', serif;
+        }
+
+        .menu-card {
+            background: white;
+            border-top: 8px solid var(--primary);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+        }
+
+        .item-row:hover .item-name {
+            color: var(--primary);
+            transform: translateX(4px);
+        }
+
+        .item-name {
+            transition: all 0.2s ease;
+        }
+
+        .spice-fire {
+            color: #ef4444;
+        }
+
+        .section-divider {
+            display: flex;
+            align-items: center;
+            text-align: center;
+            color: var(--accent);
+            margin: 2rem 0;
+        }
+
+        .section-divider::before,
+        .section-divider::after {
+            content: '';
+            flex: 1;
+            border-bottom: 1px dashed var(--accent);
+        }
+
+        .section-divider:not(:empty)::before {
+            margin-right: 1rem;
+        }
+
+        .section-divider:not(:empty)::after {
+            margin-left: 1rem;
+        }
+    </style>
+</head>
+<body class="p-4 md:p-8">
+
+    <div class="max-w-3xl mx-auto menu-card rounded-2xl overflow-hidden mb-12">
+        <!-- Header -->
+        <header class="text-center py-10 px-6 bg-stone-50 border-b border-stone-100">
+            <h1 class="text-5xl md:text-6xl text-red-900 mb-2">Shankar Bhojnalay</h1>
+            <p class="text-amber-700 italic font-medium tracking-wide">Bringing the Fiery Heart of Indian Spices to Your Plate</p>
+            <div class="mt-4 flex justify-center gap-4 text-sm text-stone-500 font-semibold uppercase tracking-widest">
+                <span>Est. 2026</span>
+                <span>•</span>
+                <span>Authentic Nagpuri & Saoji</span>
+            </div>
+        </header>
+
+        <!-- Menu Content -->
+        <div class="p-6 md:p-12">
+            
+            <!-- Starters -->
+            <section>
+                <div class="section-divider text-xl font-bold uppercase tracking-widest">The Spark (Starters)</div>
+                
+                <div class="space-y-6">
+                    <div class="item-row flex justify-between items-start group">
+                        <div class="flex-1 pr-4">
+                            <h3 class="item-name text-lg font-semibold">Paneer 65 <span class="spice-fire">🔥🔥</span></h3>
+                            <p class="text-stone-500 text-sm italic">Fiery deep-fried cottage cheese cubes tossed with curry leaves and green chilies.</p>
+                        </div>
+                        <span class="font-bold text-red-800">₹180</span>
+                    </div>
+
+                    <div class="item-row flex justify-between items-start group">
+                        <div class="flex-1 pr-4">
+                            <h3 class="item-name text-lg font-semibold">Chicken Angara Tikka <span class="spice-fire">🔥🔥🔥</span></h3>
+                            <p class="text-stone-500 text-sm italic">Smoky, charcoal-grilled chicken marinated in a secret blend of red hot chilies.</p>
+                        </div>
+                        <span class="font-bold text-red-800">₹240</span>
+                    </div>
+
+                    <div class="item-row flex justify-between items-start group">
+                        <div class="flex-1 pr-4">
+                            <h3 class="item-name text-lg font-semibold">Spicy Masala Papad</h3>
+                            <p class="text-stone-500 text-sm italic">The classic appetizer topped with a zesty onion-tomato salsa and extra chaat masala.</p>
+                        </div>
+                        <span class="font-bold text-red-800">₹45</span>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Main Course -->
+            <section>
+                <div class="section-divider text-xl font-bold uppercase tracking-widest">The Flame (Main Course)</div>
+                
+                <div class="space-y-6">
+                    <div class="item-row flex justify-between items-start group">
+                        <div class="flex-1 pr-4">
+                            <h3 class="item-name text-lg font-semibold">Nagpuri Saoji Chicken Curry <span class="spice-fire">🔥🔥🔥🔥</span></h3>
+                            <p class="text-stone-500 text-sm italic">Our signature dish. A dangerously spicy, slow-cooked gravy using the traditional 'Black Spice' blend.</p>
+                        </div>
+                        <span class="font-bold text-red-800">₹380</span>
+                    </div>
+
+                    <div class="item-row flex justify-between items-start group">
+                        <div class="flex-1 pr-4">
+                            <h3 class="item-name text-lg font-semibold">Paneer Kolhapuri <span class="spice-fire">🔥🔥🔥</span></h3>
+                            <p class="text-stone-500 text-sm italic">Fresh paneer cubes in a thick, vibrant red gravy known for its intense heat and coconut base.</p>
+                        </div>
+                        <span class="font-bold text-red-800">₹290</span>
+                    </div>
+
+                    <div class="item-row flex justify-between items-start group">
+                        <div class="flex-1 pr-4">
+                            <h3 class="item-name text-lg font-semibold">Khandeshi Shev Bhaji <span class="spice-fire">🔥🔥</span></h3>
+                            <p class="text-stone-500 text-sm italic">Spicy Shev served in a fiery, oil-rich rassa. A local Maharashtrian favorite.</p>
+                        </div>
+                        <span class="font-bold text-red-800">₹190</span>
+                    </div>
+
+                    <div class="item-row flex justify-between items-start group">
+                        <div class="flex-1 pr-4">
+                            <h3 class="item-name text-lg font-semibold">Double Tadka Dal Fry <span class="spice-fire">🔥</span></h3>
+                            <p class="text-stone-500 text-sm italic">Yellow lentils tempered twice with garlic, cumin, and whole dry Kashmiri red chilies.</p>
+                        </div>
+                        <span class="font-bold text-red-800">₹160</span>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Rice & Breads -->
+            <section>
+                <div class="section-divider text-xl font-bold uppercase tracking-widest">Sides & Breads</div>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-4">
+                    <div class="flex justify-between border-b border-stone-100 py-2">
+                        <span>Butter Naan / Garlic Naan</span>
+                        <span class="font-bold">₹50 / ₹70</span>
+                    </div>
+                    <div class="flex justify-between border-b border-stone-100 py-2">
+                        <span>Tandoori Roti (Butter)</span>
+                        <span class="font-bold">₹30</span>
+                    </div>
+                    <div class="flex justify-between border-b border-stone-100 py-2">
+                        <span>Spicy Hyderabadi Biryani</span>
+                        <span class="font-bold">₹320</span>
+                    </div>
+                    <div class="flex justify-between border-b border-stone-100 py-2">
+                        <span>Jeera Rice</span>
+                        <span class="font-bold">₹140</span>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Coolers -->
+            <section>
+                <div class="section-divider text-xl font-bold uppercase tracking-widest">The Extinguisher (Coolers)</div>
+                <div class="space-y-4">
+                    <div class="item-row flex justify-between items-center group">
+                        <div>
+                            <h3 class="item-name font-semibold text-blue-900">Masala Taas (Buttermilk)</h3>
+                        </div>
+                        <span class="font-bold text-red-800">₹40</span>
+                    </div>
+                    <div class="item-row flex justify-between items-center group">
+                        <div>
+                            <h3 class="item-name font-semibold text-blue-900">Sol Kadhi</h3>
+                        </div>
+                        <span class="font-bold text-red-800">₹60</span>
+                    </div>
+                </div>
+            </section>
+
+        </div>
+
+        <!-- Footer -->
+        <footer class="bg-stone-900 text-stone-400 p-8 text-center text-sm">
+            <p class="mb-4 text-stone-200">Prices are inclusive of GST. We use only high-quality spices and fresh ingredients.</p>
+            <div class="flex flex-col md:flex-row justify-center items-center gap-4 text-xs font-semibold uppercase tracking-widest">
+                <span>📍 Main Road, Nagpur</span>
+                <span class="hidden md:block">|</span>
+                <span>📞 +91 98765 43210</span>
+                <span class="hidden md:block">|</span>
+                <span>🕒 11 AM - 11 PM</span>
+            </div>
+            <p class="mt-6 text-stone-600">&copy; 2026 Shankar Bhojnalay. All Rights Reserved.</p>
+        </footer>
+    </div>
+
+</body>
+</html>
