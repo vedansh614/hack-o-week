@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>India Weather Watch</title>
+    <style>
+        :root {
+            --bg-gradient: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            --card-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+            --sunny-color: #f6ad55;
+            --cloudy-color: #cbd5e0;
+            --rainy-color: #63b3ed;
+            --hot-color: #fc8181;
+            --text-main: #2d3748;
+            --text-muted: #718096;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+        }
+
+        body {
+            background: var(--bg-gradient);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            color: white;
+        }
+
+        .header-section {
+            text-align: center;
+            margin-bottom: 2.5rem;
+        }
+
+        h1 {
+            font-weight: 300;
+            letter-spacing: 2px;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+            margin-bottom: 0.5rem;
+        }
+
+        #current-time {
+            font-size: 1.2rem;
+            font-weight: 400;
+            opacity: 0.9;
+            background: rgba(255, 255, 255, 0.1);
+            padding: 5px 15px;
+            border-radius: 20px;
+            display: inline-block;
+        }
+
+        .dashboard {
+            display: flex;
+            gap: 24px;
+            flex-wrap: wrap;
+            justify-content: center;
+            width: 100%;
+            max-width: 1000px;
+        }
+
+        .weather-card {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 24px;
+            padding: 30px;
+            width: 280px;
+            color: var(--text-main);
+            box-shadow: var(--card-shadow);
+            transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .weather-card:hover {
+            transform: translateY(-10px);
+            background: #ffffff;
+        }
+
+        /* Weather Condition Accents */
+        .weather-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 6px;
+        }
+
+        .card-hot::before { background-color: var(--hot-color); }
+        .card-cloudy::before { background-color: var(--cloudy-color); }
+        .card-sunny::before { background-color: var(--sunny-color); }
+
+        .city-name {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 4px;
+        }
+
+        .country {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 20px;
+        }
+
+        .weather-icon {
+            font-size: 4rem;
+            margin: 10px 0;
+            filter: drop-shadow(0 4px 6px rgba(0,0,0,0.1));
+        }
+
+        .temperature {
+            font-size: 3.5rem;
+            font-weight: 200;
+            margin: 10px 0;
+            display: flex;
+        }
+
+        .unit {
+            font-size: 1.5rem;
+            margin-top: 10px;
+            font-weight: 400;
+        }
+
+        .description {
+            font-size: 1rem;
+            color: var(--text-muted);
+            margin-bottom: 25px;
+            font-weight: 500;
+        }
+
+        .stats {
+            display: flex;
+            width: 100%;
+            justify-content: space-between;
+            border-top: 1px solid #edf2f7;
+            padding-top: 20px;
+        }
+
+        .stat-item {
+            text-align: center;
+            flex: 1;
+        }
+
+        .stat-value {
+            display: block;
+            font-weight: 600;
+            font-size: 0.9rem;
+            transition: color 0.3s ease;
+        }
+
+        .stat-label {
+            display: block;
+            font-size: 0.7rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+        }
+
+        @media (max-width: 600px) {
+            .weather-card {
+                width: 100%;
+                max-width: 320px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="header-section">
+        <h1>India Weather Watch</h1>
+        <div id="current-time">Loading time...</div>
+    </div>
+
+    <div class="dashboard">
+        <!-- Card 1: Mumbai -->
+        <article class="weather-card card-cloudy" id="mumbai">
+            <h2 class="city-name">Mumbai</h2>
+            <span class="country">Maharashtra, India</span>
+            <div class="weather-icon">⛅</div>
+            <div class="temperature"><span class="temp-val">31</span><span class="unit">°C</span></div>
+            <p class="description">Hazy Sunshine</p>
+            <div class="stats">
+                <div class="stat-item">
+                    <span class="stat-value"><span class="humid-val">65</span>%</span>
+                    <span class="stat-label">Humidity</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-value"><span class="wind-val">12</span>km/h</span>
+                    <span class="stat-label">Wind</span>
+                </div>
+            </div>
+        </article>
+
+        <!-- Card 2: New Delhi -->
+        <article class="weather-card card-hot" id="delhi">
+            <h2 class="city-name">New Delhi</h2>
+            <span class="country">Delhi, India</span>
+            <div class="weather-icon">☀️</div>
+            <div class="temperature"><span class="temp-val">42</span><span class="unit">°C</span></div>
+            <p class="description">Heatwave Alert</p>
+            <div class="stats">
+                <div class="stat-item">
+                    <span class="stat-value"><span class="humid-val">18</span>%</span>
+                    <span class="stat-label">Humidity</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-value"><span class="wind-val">15</span>km/h</span>
+                    <span class="stat-label">Wind</span>
+                </div>
+            </div>
+        </article>
+
+        <!-- Card 3: Bangalore -->
+        <article class="weather-card card-sunny" id="bangalore">
+            <h2 class="city-name">Bangalore</h2>
+            <span class="country">Karnataka, India</span>
+            <div class="weather-icon">🌤️</div>
+            <div class="temperature"><span class="temp-val">26</span><span class="unit">°C</span></div>
+            <p class="description">Pleasant Breeze</p>
+            <div class="stats">
+                <div class="stat-item">
+                    <span class="stat-value"><span class="humid-val">52</span>%</span>
+                    <span class="stat-label">Humidity</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-value"><span class="wind-val">10</span>km/h</span>
+                    <span class="stat-label">Wind</span>
+                </div>
+            </div>
+        </article>
+    </div>
+
+    <script>
+        // Update Clock every second
+        function updateClock() {
+            const now = new Date();
+            const options = { 
+                weekday: 'long', 
+                year: 'numeric', 
+                month: 'long', 
+                day: 'numeric',
+                hour: '2-digit',
+                minute: '2-digit',
+                second: '2-digit'
+            };
+            document.getElementById('current-time').textContent = now.toLocaleDateString('en-IN', options);
+        }
+
+        // Simulate Live Data updates
+        function updateWeatherData() {
+            const cities = ['mumbai', 'delhi', 'bangalore'];
+            
+            cities.forEach(id => {
+                const card = document.getElementById(id);
+                
+                // Randomly fluctuate temperature (+/- 0.5 degrees)
+                const tempEl = card.querySelector('.temp-val');
+                let currentTemp = parseFloat(tempEl.textContent);
+                currentTemp += (Math.random() - 0.5) * 0.2;
+                tempEl.textContent = currentTemp.toFixed(1);
+
+                // Randomly fluctuate humidity (+/- 1%)
+                const humidEl = card.querySelector('.humid-val');
+                let currentHumid = parseInt(humidEl.textContent);
+                if (Math.random() > 0.8) {
+                    currentHumid += Math.random() > 0.5 ? 1 : -1;
+                    humidEl.textContent = Math.max(0, Math.min(100, currentHumid));
+                }
+
+                // Randomly fluctuate wind (+/- 1 km/h)
+                const windEl = card.querySelector('.wind-val');
+                let currentWind = parseInt(windEl.textContent);
+                if (Math.random() > 0.8) {
+                    currentWind += Math.random() > 0.5 ? 1 : -1;
+                    windEl.textContent = Math.max(0, currentWind);
+                }
+            });
+        }
+
+        // Initialize Intervals
+        setInterval(updateClock, 1000);
+        setInterval(updateWeatherData, 3000); // Update data every 3 seconds for visible effect
+
+        // Initial calls
+        updateClock();
+    </script>
+</body>
+</html>
