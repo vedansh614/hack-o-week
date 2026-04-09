@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Library Book Catalogue | Professional Edition</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap');
+        
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: #f1f5f9;
+            color: #1e293b;
+        }
+
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.5);
+        }
+
+        .capacity-bar {
+            transition: width 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        .book-card {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            border: 1px solid transparent;
+        }
+
+        .book-card:hover {
+            transform: translateY(-4px);
+            background-color: #ffffff;
+            border-color: #e2e8f0;
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.05), 0 10px 10px -5px rgba(0, 0, 0, 0.02);
+        }
+
+        .input-focus {
+            transition: all 0.2s ease;
+        }
+
+        .input-focus:focus {
+            border-color: #6366f1;
+            box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.15);
+        }
+
+        @keyframes fadeInScale {
+            from { opacity: 0; transform: scale(0.95); }
+            to { opacity: 1; transform: scale(1); }
+        }
+
+        .animate-card {
+            animation: fadeInScale 0.4s ease forwards;
+        }
+    </style>
+</head>
+<body class="antialiased min-h-screen selection:bg-indigo-100">
+    <div class="max-w-6xl mx-auto px-4 py-8 md:py-12">
+        <!-- Dashboard Header -->
+        <header class="mb-10 flex flex-col md:flex-row md:items-end justify-between gap-6">
+            <div>
+                <div class="flex items-center gap-3 mb-2">
+                    <div class="bg-indigo-600 p-2 rounded-lg shadow-lg shadow-indigo-200">
+                        <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path>
+                        </svg>
+                    </div>
+                    <span class="text-sm font-bold uppercase tracking-widest text-indigo-600">Inventory System</span>
+                </div>
+                <h1 class="text-4xl font-extrabold text-slate-900 tracking-tight">Library Catalogue</h1>
+                <p class="text-slate-500 mt-2 text-lg">Digital collection management and archival tool.</p>
+            </div>
+
+            <div class="glass-panel p-5 rounded-2xl border border-slate-200 min-w-[280px] shadow-sm">
+                <div class="flex justify-between items-center mb-3">
+                    <span class="text-xs font-bold uppercase tracking-wider text-slate-400">Storage Utilization</span>
+                    <span id="capacity-text" class="text-sm font-bold text-indigo-600">0 / 50 Units</span>
+                </div>
+                <div class="w-full bg-slate-200 rounded-full h-3 overflow-hidden">
+                    <div id="capacity-fill" class="bg-indigo-600 h-full rounded-full capacity-bar" style="width: 0%"></div>
+                </div>
+            </div>
+        </header>
+
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+            <!-- Action Sidebar -->
+            <aside class="lg:col-span-4">
+                <div class="bg-white p-8 rounded-3xl shadow-sm border border-slate-200 sticky top-8">
+                    <h2 class="text-xl font-bold text-slate-800 mb-6">Add Entry</h2>
+                    <form id="add-book-form" class="space-y-5">
+                        <div class="space-y-1.5">
+                            <label class="text-xs font-bold uppercase tracking-wider text-slate-500 ml-1">Title</label>
+                            <input type="text" id="book-title" required 
+                                class="w-full px-4 py-3 rounded-xl border border-slate-200 bg-slate-50 input-focus outline-none text-slate-800 placeholder:text-slate-400"
+                                placeholder="Enter book title...">
+                        </div>
+                        <div class="space-y-1.5">
+                            <label class="text-xs font-bold uppercase tracking-wider text-slate-500 ml-1">Author</label>
+                            <input type="text" id="book-author" required 
+                                class="w-full px-4 py-3 rounded-xl border border-slate-200 bg-slate-50 input-focus outline-none text-slate-800 placeholder:text-slate-400"
+                                placeholder="Enter author name...">
+                        </div>
+                        <button type="submit" id="submit-btn"
+                            class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-4 rounded-xl transition-all shadow-lg shadow-indigo-100 flex items-center justify-center gap-2 mt-2">
+                            Register Book
+                        </button>
+                    </form>
+                </div>
+            </aside>
+
+            <!-- Main Listing Area -->
+            <main class="lg:col-span-8 space-y-6">
+                <!-- Search -->
+                <div class="relative group">
+                    <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                        <svg class="h-5 w-5 text-slate-400 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                        </svg>
+                    </div>
+                    <input type="text" id="search-input" 
+                        class="w-full pl-12 pr-4 py-4 rounded-2xl border border-slate-200 bg-white shadow-sm input-focus outline-none text-slate-700"
+                        placeholder="Filter by title or author...">
+                </div>
+
+                <!-- Collection List -->
+                <div id="book-list" class="space-y-3">
+                    <!-- Dynamic entries -->
+                </div>
+
+                <!-- Empty State -->
+                <div id="empty-state" class="hidden flex flex-col items-center justify-center py-24 bg-white/50 rounded-3xl border-2 border-dashed border-slate-300">
+                    <p class="text-slate-500 font-medium">No publications found.</p>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <!-- Notification Toast -->
+    <div id="toast" class="fixed bottom-10 left-1/2 -translate-x-1/2 bg-slate-900 text-white px-8 py-4 rounded-2xl shadow-2xl transition-all transform translate-y-32 opacity-0 flex items-center gap-4 z-50">
+        <span id="toast-msg" class="font-semibold">Action Successful</span>
+    </div>
+
+    <script>
+        // Updated capacity to 50
+        const MAX_CAPACITY = 50;
+        let books = [
+            { id: 1, title: "The Great Gatsby", author: "F. Scott Fitzgerald" },
+            { id: 2, title: "1984", author: "George Orwell" },
+            { id: 3, title: "To Kill a Mockingbird", author: "Harper Lee" }
+        ];
+
+        const bookList = document.getElementById('book-list');
+        const addBookForm = document.getElementById('add-book-form');
+        const searchInput = document.getElementById('search-input');
+        const emptyState = document.getElementById('empty-state');
+        const capacityText = document.getElementById('capacity-text');
+        const capacityFill = document.getElementById('capacity-fill');
+        const toast = document.getElementById('toast');
+        const toastMsg = document.getElementById('toast-msg');
+
+        function renderBooks(filter = '') {
+            const filteredBooks = books.filter(book => 
+                book.title.toLowerCase().includes(filter.toLowerCase()) || 
+                book.author.toLowerCase().includes(filter.toLowerCase())
+            );
+
+            bookList.innerHTML = '';
+            
+            if (filteredBooks.length === 0) {
+                emptyState.classList.remove('hidden');
+            } else {
+                emptyState.classList.add('hidden');
+                filteredBooks.forEach((book, index) => {
+                    const card = document.createElement('div');
+                    card.className = `book-card bg-white p-6 rounded-2xl flex justify-between items-center group animate-card`;
+                    card.style.animationDelay = `${index * 50}ms`;
+                    card.innerHTML = `
+                        <div>
+                            <h3 class="font-bold text-slate-900 text-lg group-hover:text-indigo-600 transition-colors">${book.title}</h3>
+                            <p class="text-slate-500 text-sm">${book.author}</p>
+                        </div>
+                        <button onclick="removeBook(${book.id})" class="p-2 text-slate-300 hover:text-red-500 transition-all">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
+                            </svg>
+                        </button>
+                    `;
+                    bookList.appendChild(card);
+                });
+            }
+            updateCapacityUI();
+        }
+
+        function updateCapacityUI() {
+            const count = books.length;
+            const percentage = (count / MAX_CAPACITY) * 100;
+            capacityText.innerText = `${count} / ${MAX_CAPACITY} Units`;
+            capacityFill.style.width = `${percentage}%`;
+            
+            const submitBtn = document.getElementById('submit-btn');
+            if (count >= MAX_CAPACITY) {
+                submitBtn.disabled = true;
+                submitBtn.className = "w-full bg-slate-200 text-slate-400 font-bold py-4 rounded-xl cursor-not-allowed mt-2";
+                submitBtn.innerText = `Full Capacity`;
+            } else {
+                submitBtn.disabled = false;
+                submitBtn.className = "w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-4 rounded-xl transition-all shadow-lg mt-2";
+                submitBtn.innerText = `Register Book`;
+            }
+
+            // Visual warning if capacity is nearly full
+            if (percentage > 90) {
+                capacityFill.classList.replace('bg-indigo-600', 'bg-rose-500');
+            } else {
+                capacityFill.classList.add('bg-indigo-600');
+                capacityFill.classList.remove('bg-rose-500');
+            }
+        }
+
+        function showToast(message) {
+            toastMsg.innerText = message;
+            toast.classList.remove('translate-y-32', 'opacity-0');
+            toast.classList.add('translate-y-0', 'opacity-100');
+            setTimeout(() => {
+                toast.classList.remove('translate-y-0', 'opacity-100');
+                toast.classList.add('translate-y-32', 'opacity-0');
+            }, 3000);
+        }
+
+        function removeBook(id) {
+            books = books.filter(b => b.id !== id);
+            renderBooks(searchInput.value);
+            showToast(`Entry Removed`);
+        }
+
+        addBookForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const title = document.getElementById('book-title').value;
+            const author = document.getElementById('book-author').value;
+            if (books.length < MAX_CAPACITY) {
+                books.push({ id: Date.now(), title, author });
+                addBookForm.reset();
+                renderBooks(searchInput.value);
+                showToast(`New Book Registered`);
+            }
+        });
+
+        searchInput.addEventListener('input', (e) => renderBooks(e.target.value));
+        window.onload = () => renderBooks();
+    </script>
+</body>
+</html>
