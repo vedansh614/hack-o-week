@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>File System Directory (Binary Tree)</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+<style>
+  *{box-sizing:border-box}
+  body{margin:0;font-family:'Poppins',sans-serif;background:linear-gradient(135deg,#141e30,#243b55);color:#fff}
+  .container{max-width:700px;margin:40px auto;background:rgba(255,255,255,0.08);backdrop-filter:blur(14px);padding:24px;border-radius:20px;box-shadow:0 10px 40px rgba(0,0,0,0.5)}
+  h2{text-align:center;margin-bottom:10px}
+  input,select{width:100%;padding:12px;margin:8px 0;border:none;border-radius:12px;background:rgba(255,255,255,0.15);color:#fff;outline:none}
+  input::placeholder{color:#ddd}
+  .grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+  button{padding:12px;border:none;border-radius:12px;color:#fff;font-weight:600;cursor:pointer;transition:.25s}
+  button:hover{transform:translateY(-2px) scale(1.03);box-shadow:0 6px 18px rgba(0,0,0,.35)}
+  .add{background:linear-gradient(135deg,#00c9ff,#92fe9d)}
+  .traverse{background:linear-gradient(135deg,#4facfe,#00f2fe)}
+  .tree{margin-top:16px}
+  .node{background:rgba(255,255,255,0.15);padding:10px;border-radius:12px;margin:6px 0;animation:fade .25s ease}
+  .path{font-size:12px;opacity:.8}
+  @keyframes fade{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+</style>
+</head>
+<body>
+
+<div class="container">
+  <h2>📂 File System Directory</h2>
+
+  <input type="text" id="name" placeholder="Folder Name">
+  <input type="text" id="parent" placeholder="Parent Folder (leave empty for root)">
+  <select id="side">
+    <option value="left">Insert as Left Child</option>
+    <option value="right">Insert as Right Child</option>
+  </select>
+
+  <div class="grid">
+    <button class="add" onclick="addFolder()">➕ Add Folder</button>
+    <button class="traverse" onclick="showTraversal()">📄 Traverse</button>
+  </div>
+
+  <select id="order">
+    <option value="pre">Preorder</option>
+    <option value="in">Inorder</option>
+    <option value="post">Postorder</option>
+  </select>
+
+  <div id="output" class="tree"></div>
+</div>
+
+<script>
+class Node{
+  constructor(name){this.name=name;this.left=null;this.right=null;}
+}
+
+let root=null;
+
+function findNode(node,name){
+  if(!node) return null;
+  if(node.name===name) return node;
+  return findNode(node.left,name)||findNode(node.right,name);
+}
+
+function addFolder(){
+  let name=document.getElementById('name').value;
+  let parentName=document.getElementById('parent').value;
+  let side=document.getElementById('side').value;
+
+  if(!name){alert('Enter folder name');return;}
+
+  let newNode=new Node(name);
+
+  if(!root){
+    root=newNode;
+  } else {
+    let parent=findNode(root,parentName);
+    if(!parent){alert('Parent not found');return;}
+
+    if(side==='left'){
+      if(parent.left){alert('Left already occupied');return;}
+      parent.left=newNode;
+    } else {
+      if(parent.right){alert('Right already occupied');return;}
+      parent.right=newNode;
+    }
+  }
+
+  document.getElementById('name').value='';
+  document.getElementById('parent').value='';
+}
+
+function preorder(node,res){ if(node){res.push(node.name);preorder(node.left,res);preorder(node.right,res);} }
+function inorder(node,res){ if(node){inorder(node.left,res);res.push(node.name);inorder(node.right,res);} }
+function postorder(node,res){ if(node){postorder(node.left,res);postorder(node.right,res);res.push(node.name);} }
+
+function showTraversal(){
+  let order=document.getElementById('order').value;
+  let res=[];
+
+  if(order==='pre') preorder(root,res);
+  else if(order==='in') inorder(root,res);
+  else postorder(root,res);
+
+  let out=document.getElementById('output');
+  out.innerHTML='';
+
+  if(res.length===0){out.innerHTML='<p>No folders</p>';return;}
+
+  res.forEach((name,i)=>{
+    out.innerHTML+=`<div class=\"node\"><b>${i+1}. ${name}</b><div class=\"path\">Traversed</div></div>`;
+  });
+}
+</script>
+
+</body>
+</html>
