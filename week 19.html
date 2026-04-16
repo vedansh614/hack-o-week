@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Playlist Shuffle (Doubly Linked List)</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+<style>
+  *{box-sizing:border-box}
+  body{margin:0;font-family:'Poppins',sans-serif;background:linear-gradient(135deg,#0f0c29,#302b63,#24243e);color:#fff}
+  .container{max-width:640px;margin:36px auto;background:rgba(255,255,255,0.08);backdrop-filter:blur(14px);padding:22px;border-radius:20px;box-shadow:0 10px 40px rgba(0,0,0,.5)}
+  h2{text-align:center;margin:0 0 10px}
+  input{width:100%;padding:12px;margin:8px 0;border:none;border-radius:12px;background:rgba(255,255,255,.15);color:#fff;outline:none}
+  input::placeholder{color:#ddd}
+  .grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+  button{padding:12px;border:none;border-radius:12px;color:#fff;font-weight:600;cursor:pointer;transition:.25s}
+  button:hover{transform:translateY(-2px) scale(1.03);box-shadow:0 6px 18px rgba(0,0,0,.35)}
+  .front{background:linear-gradient(135deg,#00c9ff,#92fe9d)}
+  .end{background:linear-gradient(135deg,#f7971e,#ffd200)}
+  .delete{background:linear-gradient(135deg,#ff6a6a,#ff3c3c)}
+  .reverse{background:linear-gradient(135deg,#4facfe,#00f2fe)}
+  .list{margin-top:14px}
+  .song{display:flex;justify-content:space-between;align-items:center;background:rgba(255,255,255,.15);padding:12px;border-radius:14px;margin-top:8px;animation:fade .25s ease}
+  .meta{font-size:12px;opacity:.8}
+  .badge{background:#00f2fe;color:#000;border-radius:8px;padding:3px 8px;font-size:11px}
+  @keyframes fade{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+</style>
+</head>
+<body>
+
+<div class="container">
+  <h2>🎵 Playlist Shuffle</h2>
+
+  <input id="song" placeholder="Song name">
+
+  <div class="grid">
+    <button class="front" onclick="addFront()">⏮️ Add Front</button>
+    <button class="end" onclick="addEnd()">⏭️ Add End</button>
+    <button class="delete" onclick="deletePos()">🗑️ Delete by Position</button>
+    <button class="reverse" onclick="reverseList()">🔀 Shuffle (Reverse)</button>
+  </div>
+
+  <input id="pos" type="number" placeholder="Position to delete (1-based)">
+
+  <div id="output" class="list"></div>
+</div>
+
+<script>
+class Node{
+  constructor(val){this.val=val;this.prev=null;this.next=null}
+}
+
+let head=null, tail=null, size=0;
+
+function addFront(){
+  const v=document.getElementById('song').value.trim();
+  if(!v){alert('Enter song');return}
+  const n=new Node(v);
+  if(!head){head=tail=n}
+  else{n.next=head;head.prev=n;head=n}
+  size++;clearInput();render();
+}
+
+function addEnd(){
+  const v=document.getElementById('song').value.trim();
+  if(!v){alert('Enter song');return}
+  const n=new Node(v);
+  if(!tail){head=tail=n}
+  else{tail.next=n;n.prev=tail;tail=n}
+  size++;clearInput();render();
+}
+
+function deletePos(){
+  const p=parseInt(document.getElementById('pos').value);
+  if(!head){alert('Empty');return}
+  if(!p||p<1||p>size){alert('Invalid position');return}
+  let cur=head;let i=1;
+  while(i<p){cur=cur.next;i++}
+  if(cur.prev) cur.prev.next=cur.next; else head=cur.next;
+  if(cur.next) cur.next.prev=cur.prev; else tail=cur.prev;
+  size--;render();
+}
+
+function reverseList(){
+  let cur=head, temp=null;
+  while(cur){
+    temp=cur.prev;cur.prev=cur.next;cur.next=temp;cur=cur.prev;
+  }
+  if(temp) head=temp.prev;
+  // fix tail
+  tail=head; if(tail) while(tail.next) tail=tail.next;
+  render();
+}
+
+function clearInput(){document.getElementById('song').value='';}
+
+function render(){
+  const out=document.getElementById('output'); out.innerHTML='';
+  if(!head){out.innerHTML='<p>No songs yet 🎧</p>';return}
+  let cur=head, i=1;
+  while(cur){
+    const tag = (cur===head)?'Now':'Next';
+    out.innerHTML += `
+      <div class=\"song\">
+        <div>
+          <b>${i}. ${cur.val}</b><br>
+          <span class=\"meta\">prev: ${cur.prev?cur.prev.val:'null'} • next: ${cur.next?cur.next.val:'null'}</span>
+        </div>
+        <span class=\"badge\">${tag}</span>
+      </div>`;
+    cur=cur.next; i++;
+  }
+}
+</script>
+
+</body>
+</html>
