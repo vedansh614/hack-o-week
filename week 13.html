@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Browser History (Stack)</title>
+<style>
+    body {
+        margin: 0;
+        font-family: 'Poppins', sans-serif;
+        background: linear-gradient(135deg, #89f7fe, #66a6ff);
+    }
+
+    .container {
+        max-width: 500px;
+        margin: 50px auto;
+        background: white;
+        padding: 25px;
+        border-radius: 20px;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+    }
+
+    h2 {
+        text-align: center;
+    }
+
+    input {
+        width: 100%;
+        padding: 12px;
+        margin: 8px 0;
+        border-radius: 10px;
+        border: 1px solid #ccc;
+    }
+
+    button {
+        width: 100%;
+        padding: 12px;
+        margin-top: 10px;
+        border: none;
+        border-radius: 10px;
+        color: white;
+        font-weight: bold;
+        cursor: pointer;
+        transition: 0.2s;
+    }
+
+    button:hover {
+        transform: scale(1.05);
+    }
+
+    .visit { background: #28a745; }
+    .back { background: #dc3545; }
+    .forward { background: #007bff; }
+
+    .history {
+        background: #f1f3f5;
+        padding: 10px;
+        margin-top: 10px;
+        border-radius: 10px;
+    }
+
+    .current {
+        font-weight: bold;
+        color: #007bff;
+    }
+</style>
+</head>
+<body>
+
+<div class="container">
+    <h2>🌐 Browser History</h2>
+
+    <input type="text" id="url" placeholder="Enter URL">
+
+    <button class="visit" onclick="visitPage()">🔗 Visit Page</button>
+    <button class="back" onclick="goBack()">⬅️ Back</button>
+    <button class="forward" onclick="goForward()">➡️ Forward</button>
+
+    <div id="currentPage"></div>
+    <div id="history"></div>
+</div>
+
+<script>
+let backStack = [];
+let forwardStack = [];
+
+function visitPage() {
+    let url = document.getElementById("url").value;
+
+    if (!url) {
+        alert("Enter URL");
+        return;
+    }
+
+    if (backStack.length > 0) {
+        forwardStack = [];
+    }
+
+    backStack.push(url);
+    document.getElementById("url").value = "";
+    updateDisplay();
+}
+
+function goBack() {
+    if (backStack.length <= 1) {
+        alert("No page to go back");
+        return;
+    }
+
+    let current = backStack.pop();
+    forwardStack.push(current);
+    updateDisplay();
+}
+
+function goForward() {
+    if (forwardStack.length === 0) {
+        alert("No page to go forward");
+        return;
+    }
+
+    let page = forwardStack.pop();
+    backStack.push(page);
+    updateDisplay();
+}
+
+function updateDisplay() {
+    let currentDiv = document.getElementById("currentPage");
+    let historyDiv = document.getElementById("history");
+
+    historyDiv.innerHTML = "";
+
+    if (backStack.length === 0) {
+        currentDiv.innerHTML = "<p>No page visited</p>";
+        return;
+    }
+
+    let current = backStack[backStack.length - 1];
+
+    currentDiv.innerHTML = `<p class="current">Current: ${current}</p>`;
+
+    historyDiv.innerHTML = "<h4>Back Stack</h4>";
+    backStack.forEach((url, index) => {
+        historyDiv.innerHTML += `<div class="history">${index + 1}. ${url}</div>`;
+    });
+
+    historyDiv.innerHTML += "<h4>Forward Stack</h4>";
+    forwardStack.slice().reverse().forEach((url, index) => {
+        historyDiv.innerHTML += `<div class="history">${index + 1}. ${url}</div>`;
+    });
+}
+</script>
+
+</body>
+</html>
